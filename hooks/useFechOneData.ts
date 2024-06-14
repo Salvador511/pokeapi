@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react"
 
-const useFetch = ( limit = 10, offset = 0) => {
+const useFetchOneData = (link = '') => {
 
-    const [list, setList ] = useState([])
+    const [pkmn, setPkmn ] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+
     useEffect(() => {
         const fetchPokemons = async () => {
             try{
                 setLoading(true)
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`) 
+                const response = await fetch(link) 
                 if(response.status != 200){
                     throw new Error("Error en la peticion")
                 }
-
                 const data = await response.json()
-                setList([...list, ...data.results])
-                
+                setPkmn(data)
                 
             }catch(error){
                 setError(error as any)
@@ -26,8 +25,8 @@ const useFetch = ( limit = 10, offset = 0) => {
             
         }
         fetchPokemons()
-    },[limit, offset])
-    return { list, loading, error };
+    },[])
+    return { pkmn, loading, error };
 }
-export default useFetch
+export default useFetchOneData
     
